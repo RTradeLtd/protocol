@@ -50,5 +50,29 @@
   {
     "contractName": "TokenizedDerivativeCreator",
     "address": "0xE78eA26DD1Bce4e0D8B04fDB57b846fB331978E9"
+  },
+  {
+    "contractName": "AddressWhitelist",
+    "address": "0x0bB986ce495D9C1540De97bD9F09AB87C780A5a4"
+  },
+  {
+    "contractName": "AddressWhitelist",
+    "address": "0x7d44399583a6B5B917E8c42eA531F9911ea6cC26"
+  },
+  {
+    "contractName": "TokenizedDerivativeCreator",
+    "address": "0x78aC1e06b63410743c7b725fcdFBB4b294eDde29"
+  },
+  {
+    "contractName": "TestnetERC20",
+    "address": "0xbF7A7169562078c96f0eC1A8aFD6aE50f12e5A99"
+  },
+  {
+    "contractName": "LeveragedReturnCalculator",
+    "address": "0x3c6C9eB980A4e5e04cC82b573220FE38598097E7"
+  },
+  {
+    "contractName": "LeveragedReturnCalculator",
+    "address": "0x966fC1B596ca733706adA8cBEA9Db34aab272569"
   }
 ]
