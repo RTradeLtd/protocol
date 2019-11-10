@@ -390,10 +390,14 @@ library TokenizedDerivativeUtils {
         // Only allow the s.externalAddresses.sponsor to deposit margin.
         uint refund = s._pullSentMargin(marginToDeposit);
         s._depositInternal(marginToDeposit);
-
+        if (address(s.externalAddresses.marginCurrency) == address(0x0)) {
+            msg.sender.transfer(amount);
+        } else {
+            require(s.externalAddresses.marginCurrency.transferFrom(msg.sender, address(this), amount));
+        }
         // Send any refund due to sending more margin than the argument indicated (should only be able to happen in the
         // ETH case).
-        s._sendMargin(refund);
+        //s._sendMargin(refund);
     }
 
     function _remargin(TDS.Storage storage s) external onlySponsorOrAdmin(s) {
@@ -1029,7 +1033,7 @@ library TokenizedDerivativeUtils {
         if (address(s.externalAddresses.marginCurrency) == address(0x0)) {
             msg.sender.transfer(amount);
         } else {
-            require(s.externalAddresses.marginCurrency.transferFrom(address(this), msg.sender, amount));
+            require(s.externalAddresses.marginCurrency.transfer(msg.sender, amount));
         }
     }
 
