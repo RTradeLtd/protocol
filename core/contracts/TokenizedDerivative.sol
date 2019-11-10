@@ -117,6 +117,7 @@ library TDS {
         uint initialTokenUnderlyingRatio;
         uint creationTime;
         string symbol;
+        uint256 strikePrice;
     }
 
     struct ExternalAddresses {
@@ -156,7 +157,7 @@ library TDS {
 
         WithdrawThrottle withdrawThrottle;
 
-        uint256 strikePrice;
+      //  uint256 strikePrice;
     }
 }
 
@@ -493,7 +494,7 @@ library TokenizedDerivativeUtils {
         // TODO(mrice32): we should have an ideal start time rather than blindly polling.
         (uint latestTime, int latestUnderlyingPrice) = s.externalAddresses.priceFeed.latestPrice(
             s.fixedParameters.product);
-        latestUnderlyingPrice = latestUnderlyingPrice - int(s.strikePrice);
+       latestUnderlyingPrice = latestUnderlyingPrice - int(s.fixedParameters.strikePrice);
         // If nonzero, take the user input as the starting price.
         if (params.startingUnderlyingPrice != 0) {
             latestUnderlyingPrice = _safeIntCast(params.startingUnderlyingPrice);
@@ -572,7 +573,7 @@ library TokenizedDerivativeUtils {
 
         // Use the oracle settlement price/time if the contract is frozen or will move to expiry on the next remargin.
         (uint recomputeTime, int recomputePrice) = !isContractLive || isContractPostExpiry ?
-            (s.endTime, OracleInterface(_getOracleAddress(s)).getPrice(s.fixedParameters.product, s.endTime) - int(s.strikePrice)):
+            (s.endTime, OracleInterface(_getOracleAddress(s)).getPrice(s.fixedParameters.product, s.endTime) - int(s.fixedParameters.strikePrice)):
             (priceFeedTime, priceFeedPrice);
         // Init the returned short balance to the current short balance.
         newShortMarginBalance = s.shortBalance;
@@ -896,7 +897,7 @@ library TokenizedDerivativeUtils {
 
     function _getLatestPrice(TDS.Storage storage s) internal view returns (uint latestTime, int latestUnderlyingPrice) {
         (latestTime, latestUnderlyingPrice) = s.externalAddresses.priceFeed.latestPrice(s.fixedParameters.product);
-        latestUnderlyingPrice = latestUnderlyingPrice - int(s.strikePrice);
+        latestUnderlyingPrice = latestUnderlyingPrice - int(s.fixedParameters.strikePrice);
         require(latestTime != 0);
     }
 
@@ -1041,7 +1042,7 @@ library TokenizedDerivativeUtils {
     function _settleVerifiedPrice(TDS.Storage storage s) internal {
         OracleInterface oracle = OracleInterface(_getOracleAddress(s));
         int oraclePrice = oracle.getPrice(s.fixedParameters.product, s.endTime);
-        oraclePrice = oraclePrice - int(s.strikePrice);
+        oraclePrice = oraclePrice - int(s.fixedParameters.strikePrice);
         s._settleWithPrice(oraclePrice);
     }
 
@@ -1155,13 +1156,12 @@ contract TokenizedDerivative is ERC20, AdministrateeInterface, ExpandedIERC20 {
         string memory _name,
         string memory _symbol
     ) public {
-        require(params.strikePrice > 0, "strike price must be greater than 0");
         // Set token properties.
         name = _name;
         symbol = _symbol;
         // Initialize the contract.
         derivativeStorage._initialize(params, _symbol);
-        derivativeStorage.strikePrice = params.strikePrice;
+        derivativeStorage.fixedParameters.strikePrice = params.strikePrice;
     }
 
     /**
