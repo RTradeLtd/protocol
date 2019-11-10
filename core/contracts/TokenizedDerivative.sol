@@ -1147,12 +1147,11 @@ interface TCADRegistrarI {
  */
 contract TokenizedDerivative is ERC20, AdministrateeInterface, ExpandedIERC20 {
     using TokenizedDerivativeUtils for TDS.Storage;
-    TCADRegistrarI public constant tcadRegistrar = TCADRegistrarI("0x00000000000Da14C27C155Bb7C1Ac9Bd7519eB3b");
+    TCADRegistrarI public constant tcadRegistrar = TCADRegistrarI(0x00000000000Da14C27C155Bb7C1Ac9Bd7519eB3b);
     // Note: these variables are to give ERC20 consumers information about the token.
     string public name;
     string public symbol;
     uint8 public constant decimals = 18; // solhint-disable-line const-name-snakecase
-
     TDS.Storage public derivativeStorage;
 
     constructor(
