@@ -155,6 +155,8 @@ library TDS {
         int defaultPenaltyAmount;
 
         WithdrawThrottle withdrawThrottle;
+
+        uint256 strikePrice;
     }
 }
 
@@ -1143,7 +1145,6 @@ contract TokenizedDerivative is ERC20, AdministrateeInterface, ExpandedIERC20 {
     // Note: these variables are to give ERC20 consumers information about the token.
     string public name;
     string public symbol;
-    uint256 public strikePrice;
     uint8 public constant decimals = 18; // solhint-disable-line const-name-snakecase
 
     TDS.Storage public derivativeStorage;
@@ -1157,9 +1158,9 @@ contract TokenizedDerivative is ERC20, AdministrateeInterface, ExpandedIERC20 {
         // Set token properties.
         name = _name;
         symbol = _symbol;
-        strikePrice = params.strikePrice;
         // Initialize the contract.
         derivativeStorage._initialize(params, _symbol);
+        derivativeStorage.strikePrice = params.strikePrice;
     }
 
     /**
