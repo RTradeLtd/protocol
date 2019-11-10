@@ -28,6 +28,7 @@ contract TokenizedDerivativeCreator is ContractCreator, Testable {
         uint startingUnderlyingPrice;
         string name;
         string symbol;
+        uint256 strikePrice;
     }
 
     AddressWhitelist public returnCalculatorWhitelist;
@@ -88,6 +89,9 @@ contract TokenizedDerivativeCreator is ContractCreator, Testable {
         constructorParams.withdrawLimit = params.withdrawLimit;
         constructorParams.returnType = params.returnType;
         constructorParams.startingUnderlyingPrice = params.startingUnderlyingPrice;
+    
+        // copy strike price
+        constructorParams.strikePrice = params.strikePrice;
 
         // Copy internal variables.
         constructorParams.finderAddress = finderAddress;
