@@ -493,7 +493,7 @@ library TokenizedDerivativeUtils {
         // TODO(mrice32): we should have an ideal start time rather than blindly polling.
         (uint latestTime, int latestUnderlyingPrice) = s.externalAddresses.priceFeed.latestPrice(
             s.fixedParameters.product);
-        latestUnderlyingPrice = latestUnderlyingPrice - s.strikePrice;
+        latestUnderlyingPrice = latestUnderlyingPrice - int(s.strikePrice);
         // If nonzero, take the user input as the starting price.
         if (params.startingUnderlyingPrice != 0) {
             latestUnderlyingPrice = _safeIntCast(params.startingUnderlyingPrice);
@@ -574,7 +574,7 @@ library TokenizedDerivativeUtils {
         (uint recomputeTime, int recomputePrice) = !isContractLive || isContractPostExpiry ?
             (s.endTime, OracleInterface(_getOracleAddress(s)).getPrice(s.fixedParameters.product, s.endTime)) :
             (priceFeedTime, priceFeedPrice);
-        recomputePrice = recomputePrice - s.strikePrice;
+        recomputePrice = recomputePrice - int(s.strikePrice);
         // Init the returned short balance to the current short balance.
         newShortMarginBalance = s.shortBalance;
 
@@ -897,7 +897,7 @@ library TokenizedDerivativeUtils {
 
     function _getLatestPrice(TDS.Storage storage s) internal view returns (uint latestTime, int latestUnderlyingPrice) {
         (latestTime, latestUnderlyingPrice) = s.externalAddresses.priceFeed.latestPrice(s.fixedParameters.product);
-        latestUnderlyingPrice = store.strikePrice;
+        latestUnderlyingPrice = latestUnderlyingPrice - int(store.strikePrice);
         require(latestTime != 0);
     }
 
@@ -1042,7 +1042,7 @@ library TokenizedDerivativeUtils {
     function _settleVerifiedPrice(TDS.Storage storage s) internal {
         OracleInterface oracle = OracleInterface(_getOracleAddress(s));
         int oraclePrice = oracle.getPrice(s.fixedParameters.product, s.endTime);
-        oraclePrice = oraclePrice - s.strikePrice;
+        oraclePrice = oraclePrice - int(s.strikePrice);
         s._settleWithPrice(oraclePrice);
     }
 
