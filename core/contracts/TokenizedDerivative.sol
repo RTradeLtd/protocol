@@ -574,7 +574,7 @@ library TokenizedDerivativeUtils {
         (uint recomputeTime, int recomputePrice) = !isContractLive || isContractPostExpiry ?
             (s.endTime, OracleInterface(_getOracleAddress(s)).getPrice(s.fixedParameters.product, s.endTime)) :
             (priceFeedTime, priceFeedPrice);
-
+        recomputePrice = recomputePrice - s.strikePrice;
         // Init the returned short balance to the current short balance.
         newShortMarginBalance = s.shortBalance;
 
