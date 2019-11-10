@@ -493,7 +493,7 @@ library TokenizedDerivativeUtils {
         // TODO(mrice32): we should have an ideal start time rather than blindly polling.
         (uint latestTime, int latestUnderlyingPrice) = s.externalAddresses.priceFeed.latestPrice(
             s.fixedParameters.product);
-
+        latestUnderlyingPrice = latestUnderlyingPrice - s.strikePrice;
         // If nonzero, take the user input as the starting price.
         if (params.startingUnderlyingPrice != 0) {
             latestUnderlyingPrice = _safeIntCast(params.startingUnderlyingPrice);
