@@ -897,7 +897,7 @@ library TokenizedDerivativeUtils {
 
     function _getLatestPrice(TDS.Storage storage s) internal view returns (uint latestTime, int latestUnderlyingPrice) {
         (latestTime, latestUnderlyingPrice) = s.externalAddresses.priceFeed.latestPrice(s.fixedParameters.product);
-        latestUnderlyingPrice = latestUnderlyingPrice - int(store.strikePrice);
+        latestUnderlyingPrice = latestUnderlyingPrice - int(s.strikePrice);
         require(latestTime != 0);
     }
 
