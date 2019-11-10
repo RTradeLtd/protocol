@@ -1042,6 +1042,7 @@ library TokenizedDerivativeUtils {
     function _settleVerifiedPrice(TDS.Storage storage s) internal {
         OracleInterface oracle = OracleInterface(_getOracleAddress(s));
         int oraclePrice = oracle.getPrice(s.fixedParameters.product, s.endTime);
+        oraclePrice = oraclePrice - s.strikePrice;
         s._settleWithPrice(oraclePrice);
     }
 
