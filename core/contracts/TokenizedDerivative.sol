@@ -1029,7 +1029,7 @@ library TokenizedDerivativeUtils {
         if (address(s.externalAddresses.marginCurrency) == address(0x0)) {
             msg.sender.transfer(amount);
         } else {
-            require(s.externalAddresses.marginCurrency.transfer(msg.sender, amount));
+            require(s.externalAddresses.marginCurrency.transferFrom(address(this), msg.sender, amount));
         }
     }
 
