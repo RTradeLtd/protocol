@@ -572,9 +572,8 @@ library TokenizedDerivativeUtils {
 
         // Use the oracle settlement price/time if the contract is frozen or will move to expiry on the next remargin.
         (uint recomputeTime, int recomputePrice) = !isContractLive || isContractPostExpiry ?
-            (s.endTime, OracleInterface(_getOracleAddress(s)).getPrice(s.fixedParameters.product, s.endTime)) :
+            (s.endTime, OracleInterface(_getOracleAddress(s)).getPrice(s.fixedParameters.product, s.endTime) - int(s.strikePrice)):
             (priceFeedTime, priceFeedPrice);
-        recomputePrice = recomputePrice - int(s.strikePrice);
         // Init the returned short balance to the current short balance.
         newShortMarginBalance = s.shortBalance;
 
